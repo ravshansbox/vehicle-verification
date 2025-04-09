@@ -1,0 +1,11 @@
+{
+  "name": "vehicle-certification",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "vite": "^6.2.5"
+  }
+}

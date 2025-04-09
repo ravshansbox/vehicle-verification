@@ -1,0 +1,16 @@
+{
+  "name": "vehicle-certification",
+  "description": "Vehicle Certification",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "popup.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["https://oldmy.gov.uz:4433/ru/vehicle-certification/*"]
+    }
+  ]
+}
