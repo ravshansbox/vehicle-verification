@@ -1,9 +1,11 @@
+export {}
+
 console.info('Vehicle certification extension activated')
 
-const formatDate = dateString => {
+const formatDate = (input: string) => {
   const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/
-  const match = dateString.match(datePattern)
-  if (match === null) return null
+  const match = input.match(datePattern)
+  if (match === null) return ''
   const [_, year, month, day] = match
   return [day, month, year].join('.')
 }
@@ -11,10 +13,9 @@ const formatDate = dateString => {
 const getPeriods = () => {
   return new Array(24)
     .fill(null)
-    .map((_item, index) => index)
-    .map(hour => {
-      const currentHour = hour.toString().padStart(2, '0')
-      const nextHour = (hour + 1).toString().padStart(2, '0')
+    .map((_, index) => {
+      const currentHour = index.toString().padStart(2, '0')
+      const nextHour = (index + 1).toString().padStart(2, '0')
       return [
         `${currentHour}:00-${currentHour}:15`,
         `${currentHour}:15-${currentHour}:30`,
@@ -27,9 +28,11 @@ const getPeriods = () => {
 
 chrome.runtime.onMessage.addListener(async ({ action, date }) => {
   if (action !== 'vehicle_certification') return
-  const dateInput = document.querySelector('#date')
+  const dateInput = document.querySelector('#date') as HTMLInputElement
   dateInput.value = formatDate(date)
-  const hourSelect = document.querySelector('#vehiclecertificationmodel-hour')
+  const hourSelect = document.querySelector(
+    '#vehiclecertificationmodel-hour',
+  ) as HTMLSelectElement
   hourSelect.removeAttribute('disabled')
   const periods = getPeriods()
   for (const period of periods) {
@@ -39,7 +42,9 @@ chrome.runtime.onMessage.addListener(async ({ action, date }) => {
     hourSelect.appendChild(option)
   }
   hourSelect.value = periods[0]
-  const submitButton = document.querySelector('#btn-get-order')
+  const submitButton = document.querySelector(
+    '#btn-get-order',
+  ) as HTMLButtonElement
   submitButton.removeAttribute('disabled')
   submitButton.click()
 })
