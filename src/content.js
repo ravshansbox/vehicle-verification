@@ -9,9 +9,10 @@ chrome.runtime.onMessage.addListener(async ({ action, date }) => {
   )
   day.classList.remove('disabled')
   day.click()
-  const hourSelector = document.querySelector('#vehiclecertificationmodel-hour')
-  hourSelector.focus()
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  const hourSelect = document.querySelector('#vehiclecertificationmodel-hour')
+  hourSelect.removeAttribute('disabled')
+  hourSelect.focus()
+  await new Promise(resolve => setTimeout(resolve, 3000))
   new Array(24)
     .fill(null)
     .map((_item, index) => index)
@@ -30,6 +31,11 @@ chrome.runtime.onMessage.addListener(async ({ action, date }) => {
       const option = document.createElement('option')
       option.value = period
       option.textContent = period
-      hourSelector.appendChild(option)
+      hourSelect.appendChild(option)
     })
+  const firstOption = hourSelect.querySelector('option')
+  hourSelect.value = firstOption.value
+  const submitButton = document.querySelector('#btn-get-order')
+  submitButton.focus()
+  submitButton.click()
 })
