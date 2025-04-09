@@ -5,7 +5,7 @@ const getDefaultDate = () => {
   return date
 }
 
-const formatDate = (date) => {
+const formatDate = date => {
   return [
     date.getFullYear().toString().padStart(4, '0'),
     (date.getMonth() + 1).toString().padStart(2, '0'),
@@ -16,7 +16,6 @@ const formatDate = (date) => {
 document.addEventListener('DOMContentLoaded', () => {
   const date = document.querySelector('#date')
   date.value = formatDate(getDefaultDate())
-
   const button = document.querySelector('#submit')
   button.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({

@@ -1,8 +1,7 @@
 {
   "name": "vehicle-certification",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite"
+    "build": "vite build"
   },
   "devDependencies": {
     "prettier": "^3.5.3",

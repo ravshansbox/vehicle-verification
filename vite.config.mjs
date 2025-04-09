@@ -9,8 +9,9 @@ export default defineConfig({
     lib: {
       entry: {
         popup: resolve(__dirname, 'src/popup.js'),
-        content: resolve(__dirname, 'src/content.js'),
-      },
+        content: resolve(__dirname, 'src/content.js')
+      }
     },
-  },
+    minify: false
+  }
 })
