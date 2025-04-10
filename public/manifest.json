@@ -13,7 +13,10 @@
       "matches": [
         "https://oldmy.gov.uz:4433/uz/vehicle-certification/*",
         "https://oldmy.gov.uz:4433/oz/vehicle-certification/*",
-        "https://oldmy.gov.uz:4433/ru/vehicle-certification/*"
+        "https://oldmy.gov.uz:4433/ru/vehicle-certification/*",
+        "https://oldmy.gov.uz/uz/vehicle-certification/*",
+        "https://oldmy.gov.uz/oz/vehicle-certification/*",
+        "https://oldmy.gov.uz/ru/vehicle-certification/*"
       ]
     }
   ]
