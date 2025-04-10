@@ -1,11 +1,5 @@
-export {}
-
-const getDefaultDate = () => {
-  const date = new Date()
-  const diff = date.getHours() === 0 ? 15 : 16
-  date.setDate(date.getDate() + diff)
-  return date
-}
+import { getDefaultDate } from './getDefaultDate'
+import { getIntervals } from './getIntervals'
 
 const formatDate = (date: Date) => {
   return [
@@ -16,15 +10,27 @@ const formatDate = (date: Date) => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const date = document.querySelector('#date') as HTMLInputElement
-  date.value = formatDate(getDefaultDate())
+  const dateInput = document.querySelector('#date') as HTMLInputElement
+  dateInput.value = formatDate(getDefaultDate())
+  const intervalSelect = document.querySelector(
+    '#interval',
+  ) as HTMLSelectElement
+  const intervals = getIntervals()
+  for (const interval of intervals) {
+    const option = document.createElement('option')
+    option.value = interval
+    option.textContent = interval
+    intervalSelect.appendChild(option)
+  }
+  intervalSelect.value = intervals[0]
   const button = document.querySelector('#submit') as HTMLButtonElement
   button.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     if (!tab.id) return
     await chrome.tabs.sendMessage(tab.id, {
       action: 'vehicle_certification',
-      date: date.value,
+      date: dateInput.value,
+      interval: intervalSelect.value,
     })
   })
 })

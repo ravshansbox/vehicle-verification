@@ -9,7 +9,7 @@
   },
   "content_scripts": [
     {
-      "js": ["content.mjs"],
+      "js": ["content.js"],
       "matches": [
         "https://oldmy.gov.uz:4433/uz/vehicle-certification/*",
         "https://oldmy.gov.uz:4433/oz/vehicle-certification/*",

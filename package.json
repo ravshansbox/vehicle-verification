@@ -1,11 +1,12 @@
 {
   "name": "vehicle-certification",
   "scripts": {
-    "build": "vite build"
+    "build": "tsup"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.313",
     "prettier": "^3.5.3",
-    "vite": "^6.2.5"
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
   }
 }

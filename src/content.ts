@@ -1,4 +1,4 @@
-export {}
+import { getIntervals } from './getIntervals'
 
 console.info('Vehicle certification extension activated')
 
@@ -10,38 +10,22 @@ const formatDate = (input: string) => {
   return [day, month, year].join('.')
 }
 
-const getPeriods = () => {
-  return new Array(24)
-    .fill(null)
-    .map((_, index) => {
-      const currentHour = index.toString().padStart(2, '0')
-      const nextHour = (index + 1).toString().padStart(2, '0')
-      return [
-        `${currentHour}:00-${currentHour}:15`,
-        `${currentHour}:15-${currentHour}:30`,
-        `${currentHour}:30-${currentHour}:45`,
-        `${currentHour}:45-${nextHour}:00`,
-      ]
-    })
-    .flat()
-}
-
-chrome.runtime.onMessage.addListener(async ({ action, date }) => {
+chrome.runtime.onMessage.addListener(async ({ action, date, interval }) => {
   if (action !== 'vehicle_certification') return
   const dateInput = document.querySelector('#date') as HTMLInputElement
   dateInput.value = formatDate(date)
-  const hourSelect = document.querySelector(
+  const intervalSelect = document.querySelector(
     '#vehiclecertificationmodel-hour',
   ) as HTMLSelectElement
-  hourSelect.removeAttribute('disabled')
-  const periods = getPeriods()
-  for (const period of periods) {
+  intervalSelect.removeAttribute('disabled')
+  const intervals = getIntervals()
+  for (const interval of intervals) {
     const option = document.createElement('option')
-    option.value = period
-    option.textContent = period
-    hourSelect.appendChild(option)
+    option.value = interval
+    option.textContent = interval
+    intervalSelect.appendChild(option)
   }
-  hourSelect.value = periods[0]
+  intervalSelect.value = interval
   const submitButton = document.querySelector(
     '#btn-get-order',
   ) as HTMLButtonElement
