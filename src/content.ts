@@ -21,8 +21,8 @@ chrome.runtime.onMessage.addListener(async ({ action, date, interval }) => {
   const intervals = getIntervals()
   for (const interval of intervals) {
     const option = document.createElement('option')
-    option.value = interval
-    option.textContent = interval
+    option.value = interval.id
+    option.textContent = interval.name
     intervalSelect.appendChild(option)
   }
   intervalSelect.value = interval

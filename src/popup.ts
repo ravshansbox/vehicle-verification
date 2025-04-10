@@ -18,11 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const intervals = getIntervals()
   for (const interval of intervals) {
     const option = document.createElement('option')
-    option.value = interval
-    option.textContent = interval
+    option.value = interval.id
+    option.textContent = interval.name
     intervalSelect.appendChild(option)
   }
-  intervalSelect.value = intervals[0]
+  intervalSelect.value = intervals[intervals.length - 1].id
   const button = document.querySelector('#submit') as HTMLButtonElement
   button.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
