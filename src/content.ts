@@ -1,3 +1,4 @@
+import { actionTypes } from './constants'
 import { getIntervals } from './getIntervals'
 
 console.info('Vehicle certification extension activated')
@@ -11,7 +12,7 @@ const formatDate = (input: string) => {
 }
 
 chrome.runtime.onMessage.addListener(async ({ action, date, interval }) => {
-  if (action !== 'vehicle_certification') return
+  if (action !== actionTypes.vehicle_certification) return
   const dateInput = document.querySelector('#date') as HTMLInputElement
   dateInput.value = formatDate(date)
   const intervalSelect = document.querySelector(
