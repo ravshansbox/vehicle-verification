@@ -51,3 +51,17 @@ export const getPotentialTargetDates = async () => {
 export const times = (length: number) => {
   return new Array(length).fill(null).map((_, index) => index)
 }
+
+export const createTab = async (url: string) => {
+  const tab = await chrome.tabs.create({ url })
+  return new Promise<chrome.tabs.Tab>(resolve => {
+    chrome.tabs.onUpdated.addListener(
+      function listener(updatedTabId, changeInfo) {
+        if (updatedTabId === tab.id && changeInfo.status === 'complete') {
+          chrome.tabs.onUpdated.removeListener(listener)
+          resolve(tab)
+        }
+      },
+    )
+  })
+}
