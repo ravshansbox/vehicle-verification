@@ -1,35 +1,53 @@
-import { actionTypes } from './constants'
-import { getIntervals } from './getIntervals'
+import dayjs from 'dayjs'
+import { actions } from './constants'
+import { getIntervals, getPotentialTargetDates } from './utils'
 
 console.info('Vehicle certification extension activated')
 
-const formatDate = (input: string) => {
-  const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/
-  const match = input.match(datePattern)
-  if (match === null) return ''
-  const [_, year, month, day] = match
-  return [day, month, year].join('.')
-}
-
-chrome.runtime.onMessage.addListener(async ({ action, date, interval }) => {
-  if (action !== actionTypes.vehicle_certification) return
-  const dateInput = document.querySelector('#date') as HTMLInputElement
-  dateInput.value = formatDate(date)
-  const intervalSelect = document.querySelector(
-    '#vehiclecertificationmodel-hour',
-  ) as HTMLSelectElement
-  intervalSelect.removeAttribute('disabled')
-  const intervals = getIntervals()
-  for (const interval of intervals) {
-    const option = document.createElement('option')
-    option.value = interval.id
-    option.textContent = interval.name
-    intervalSelect.appendChild(option)
+chrome.runtime.onMessage.addListener(async ({ action, ...message }) => {
+  if (action === actions.fetch_intervals) {
+    for (const date of await getPotentialTargetDates()) {
+      const formattedTargetDate = dayjs(date).format('DD.MM.YYYY')
+      const response = await fetch(
+        '/uz/vehicle-certification/default/get-custom-order-available-hours',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-Token': (
+              document.querySelector('meta[name=csrf-token]') as HTMLMetaElement
+            ).content,
+          },
+          body: new URLSearchParams({
+            'depdrop_parents[0]': formattedTargetDate,
+            'depdrop_all_params[date]': formattedTargetDate,
+          }),
+        },
+      )
+      const { output } = await response.json()
+      console.log(date, output)
+    }
   }
-  intervalSelect.value = interval
-  const submitButton = document.querySelector(
-    '#btn-get-order',
-  ) as HTMLButtonElement
-  submitButton.removeAttribute('disabled')
-  submitButton.click()
+  if (action === actions.vehicle_certification) {
+    const { date, interval } = message
+    const dateInput = document.querySelector('#date') as HTMLInputElement
+    dateInput.value = dayjs(date).format('DD.MM.YYYY')
+    const intervalSelect = document.querySelector(
+      '#vehiclecertificationmodel-hour',
+    ) as HTMLSelectElement
+    intervalSelect.removeAttribute('disabled')
+    const intervals = getIntervals()
+    for (const interval of intervals) {
+      const option = document.createElement('option')
+      option.value = interval.id
+      option.textContent = interval.name
+      intervalSelect.appendChild(option)
+    }
+    intervalSelect.value = interval
+    const submitButton = document.querySelector(
+      '#btn-get-order',
+    ) as HTMLButtonElement
+    submitButton.removeAttribute('disabled')
+    submitButton.click()
+  }
 })

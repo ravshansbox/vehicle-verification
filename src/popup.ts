@@ -1,25 +1,16 @@
-import { actionTypes } from './constants'
-import { getDefaultDate } from './getDefaultDate'
-import { getIntervals } from './getIntervals'
-
-const formatDate = (date: Date) => {
-  return [
-    date.getFullYear().toString().padStart(4, '0'),
-    (date.getMonth() + 1).toString().padStart(2, '0'),
-    date.getDate().toString().padStart(2, '0'),
-  ].join('-')
-}
+import dayjs from 'dayjs'
+import { actions } from './constants'
+import { getDefaultDate, getIntervals } from './utils'
 
 document.addEventListener('DOMContentLoaded', async () => {
   const dateInput = document.querySelector('#date') as HTMLInputElement
   const savedDate = await chrome.storage.sync.get([
     'vehicle_certification_date',
   ])
-  console.log('reading date:', JSON.stringify(savedDate))
   dateInput.value =
-    savedDate?.vehicle_certification_date || formatDate(getDefaultDate())
+    savedDate?.vehicle_certification_date ||
+    dayjs(getDefaultDate()).format('YYYY-MM-DD')
   dateInput.onchange = async () => {
-    console.log('Date changed:', dateInput.value)
     await chrome.storage.sync.set({
       vehicle_certification_date: dateInput.value,
     })
@@ -40,17 +31,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   intervalSelect.value =
     savedHour.vehicle_certification_hour || intervals[intervals.length - 1].id
   intervalSelect.onchange = async () => {
-    console.log('Hour changed:', intervalSelect.value)
     await chrome.storage.sync.set({
       vehicle_certification_hour: intervalSelect.value,
     })
   }
-  const button = document.querySelector('#submit') as HTMLButtonElement
-  button.addEventListener('click', async () => {
+  const fetchIntervalsButton = document.querySelector(
+    '#fetch-intervals',
+  ) as HTMLButtonElement
+  fetchIntervalsButton.addEventListener('click', async () => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    if (!tab.id) return
+    await chrome.tabs.sendMessage(tab.id, { action: actions.fetch_intervals })
+  })
+  const submitButton = document.querySelector('#submit') as HTMLButtonElement
+  submitButton.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     if (!tab.id) return
     await chrome.tabs.sendMessage(tab.id, {
-      action: actionTypes.vehicle_certification,
+      action: actions.vehicle_certification,
       date: dateInput.value,
       interval: intervalSelect.value,
     })
