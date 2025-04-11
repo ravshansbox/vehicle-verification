@@ -47,3 +47,7 @@ export const getPotentialTargetDates = async () => {
   }
   return result
 }
+
+export const times = (length: number) => {
+  return new Array(length).fill(null).map((_, index) => index)
+}

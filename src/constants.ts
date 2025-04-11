@@ -1,4 +1,5 @@
 export const actions = {
   fetch_intervals: 'fetch_intervals',
-  vehicle_certification: 'vehicle_certification',
+  submit: 'submit',
+  submit_all: 'submit_all',
 } as const

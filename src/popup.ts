@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { actions } from './constants'
-import { getDefaultDate, getIntervals } from './utils'
+import { getDefaultDate, getIntervals, times } from './utils'
 
 document.addEventListener('DOMContentLoaded', async () => {
   const dateInput = document.querySelector('#date') as HTMLInputElement
@@ -48,9 +48,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     if (!tab.id) return
     await chrome.tabs.sendMessage(tab.id, {
-      action: actions.vehicle_certification,
+      action: actions.submit,
       date: dateInput.value,
       interval: intervalSelect.value,
     })
+  })
+  const submitAllButton = document.querySelector(
+    '#submit-all',
+  ) as HTMLButtonElement
+  submitAllButton.addEventListener('click', async () => {
+    const url = 'https://oldmy.gov.uz/uz/vehicle-certification'
+    await Promise.all(times(10).map(() => chrome.tabs.create({ url })))
   })
 })

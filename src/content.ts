@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener(async ({ action, ...message }) => {
       console.log(date, output)
     }
   }
-  if (action === actions.vehicle_certification) {
+  if (action === actions.submit) {
     const { date, interval } = message
     const dateInput = document.querySelector('#date') as HTMLInputElement
     dateInput.value = dayjs(date).format('DD.MM.YYYY')
