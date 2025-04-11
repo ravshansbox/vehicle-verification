@@ -9,7 +9,9 @@
   },
   "content_scripts": [
     {
-      "js": ["content.js"],
+      "js": [
+        "content.js"
+      ],
       "matches": [
         "https://oldmy.gov.uz:4433/uz/vehicle-certification/*",
         "https://oldmy.gov.uz:4433/oz/vehicle-certification/*",
@@ -19,5 +21,8 @@
         "https://oldmy.gov.uz/ru/vehicle-certification/*"
       ]
     }
+  ],
+  "permissions": [
+    "storage"
   ]
 }

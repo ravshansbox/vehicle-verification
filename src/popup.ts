@@ -9,9 +9,15 @@ const formatDate = (date: Date) => {
   ].join('-')
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const dateInput = document.querySelector('#date') as HTMLInputElement
-  dateInput.value = formatDate(getDefaultDate())
+  const savedDate = await chrome.storage.sync.get(["vehicle_certification_date"])
+  console.log('reading date:', JSON.stringify(savedDate))
+  dateInput.value = savedDate?.vehicle_certification_date || formatDate(getDefaultDate())
+  dateInput.onchange = async () => {
+    console.log('Date changed:', dateInput.value)
+    await chrome.storage.sync.set({ "vehicle_certification_date": dateInput.value });
+  }
   const intervalSelect = document.querySelector(
     '#interval',
   ) as HTMLSelectElement
@@ -22,7 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     option.textContent = interval.name
     intervalSelect.appendChild(option)
   }
-  intervalSelect.value = intervals[intervals.length - 1].id
+  const savedHour = await chrome.storage.sync.get(["vehicle_certification_hour"])
+  intervalSelect.value = savedHour.vehicle_certification_hour || intervals[intervals.length - 1].id
+  intervalSelect.onchange = async () => {
+    console.log('Hour changed:', intervalSelect.value)
+    await chrome.storage.sync.set({ "vehicle_certification_hour": intervalSelect.value });
+  }
   const button = document.querySelector('#submit') as HTMLButtonElement
   button.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
