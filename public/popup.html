@@ -1,9 +1,22 @@
 <html>
+  <head>
+    <style>
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        min-width: 10rem;
+      }
+    </style>
+  </head>
   <body>
-    <input type="date" id="date" />
-    <select id="interval"></select>
-    <button id="fetch-intervals">Fetch intervals</button>
-    <button id="submit">Submit</button>
-    <script src="popup.js"></script>
+    <main>
+      <input type="date" id="date" />
+      <select id="interval"></select>
+      <button id="fetch-intervals">Fetch intervals</button>
+      <button id="submit">Submit</button>
+      <script src="popup.js"></script>
+    </main>
   </body>
 </html>
