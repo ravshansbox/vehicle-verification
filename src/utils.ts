@@ -40,7 +40,9 @@ export const getPotentialTargetDates = async () => {
   const today = dayjs(new Date())
   const result = []
   while (targetDate.format('YYYY-MM-DD') !== today.format('YYYY-MM-DD')) {
-    result.push(targetDate.format('YYYY-MM-DD'))
+    if (targetDate.day() !== 0) {
+      result.push(targetDate.format('YYYY-MM-DD'))
+    }
     targetDate = targetDate.subtract(1, 'day')
   }
   return result
